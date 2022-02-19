@@ -175,20 +175,22 @@ class Ui_MainWindow(object):
         self.get_data()
 
     def get_data(self):
-        self.log.appendPlainText('تلاش برای ورود ...')
+        self.log.appendPlainText('..........................')
+        self.log.appendPlainText('در حال آماده سازی برای شروع استخراج اطلاعات ...')
         try:
             url = 'https://www.tgju.org/%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1'
             page = requests.get(url)
+            self.log.appendPlainText('دریافت اطلاعات انجام شد')
+            soup = BeautifulSoup(page.text, 'html.parser')
+
+            self.log.appendPlainText('درحال پیدا کردن قیمت دلار ...')
+
+            table = soup.find('table')
+            table_row = table.tbody.find("tr")            
         except:
             self.log.appendPlainText('خطایی زخ داد')
             return
-        self.log.appendPlainText('دریافت اطلاعات با موفقیت انجام شد')
-        soup = BeautifulSoup(page.text, 'html.parser')
 
-        self.log.appendPlainText('درحال پیدا کردن قیمت دلار ...')
-
-        table = soup.find('table')
-        table_row = table.tbody.find("tr")
 
         data_list = []
 
@@ -200,7 +202,7 @@ class Ui_MainWindow(object):
             last_price = rial_to_toman_convertor(data_list[0])
             last_change_time = unicode_number_covertor(data_list[9])
 
-            text_last_change_time = "آخرین آپدیت در " + last_change_time
+            text_last_change_time = "آخرین تغییر در " + last_change_time
             self.price.setText(last_price)
             self.last_change.setText(text_last_change_time)
             self.log.appendPlainText('با موفقیت پیدا شد')
