@@ -175,7 +175,8 @@ class Ui_MainWindow(object):
         self.get_data()
 
     def get_data(self):
-        self.log.appendPlainText('..........................')
+        self.refreshBtn.setText("رفرش...")
+        self.log.appendPlainText('_____________________________________\n')
         self.log.appendPlainText('در حال آماده سازی برای شروع استخراج اطلاعات ...')
         try:
             url = 'https://www.tgju.org/%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1'
@@ -209,8 +210,19 @@ class Ui_MainWindow(object):
 
             print(last_price)
             print(last_change_time)
+
+            from datetime import datetime
+            now = datetime.now()
+            current_time = now.strftime("%H:%M:%S")
+            last_refrsh = "آخرین رفرش : "+ current_time
+            print(last_refrsh)
+            self.log.appendPlainText(last_refrsh)
         else:
             self.log.appendPlainText('پیدا نشد')
+        self.refreshBtn.setText("رفرش")
+        self.log.moveCursor(QtGui.QTextCursor.End)
+
+
 
 
 class RunApp(QtWidgets.QMainWindow, Ui_MainWindow):
