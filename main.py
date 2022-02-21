@@ -68,9 +68,95 @@ def get_data():
 
     print(last_price)
     print(last_change_time)
+    return(last_price)
 
 
 app = QApplication(sys.argv)
+
+
+
+class User_Price_Calculator_Ui(object):
+    def setupUi(self, Dialog):
+        Dialog.setObjectName("Dialog")
+        Dialog.setWindowIcon(QtGui.QIcon(resource_path('./assets/icon.ico')))
+        # Dialog.setEnabled(True)
+        Dialog.resize(500, 200)
+        Dialog.setMinimumSize(QtCore.QSize(500, 200))
+        Dialog.setMaximumSize(QtCore.QSize(500, 200))
+        font = QtGui.QFont()
+        font.setStyleStrategy(QtGui.QFont.NoAntialias)
+        Dialog.setFont(font)
+        Dialog.setWindowTitle("تبدیل قیمت دلار به تومان")
+        self.label3 = QtWidgets.QLabel(Dialog)
+        self.label3.setGeometry(QtCore.QRect(200, 29, 241, 31))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.label3.setFont(font)
+        self.label3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label3.setObjectName("label3")
+        self.btn_user_price = QtWidgets.QPushButton(Dialog)
+        self.btn_user_price.setGeometry(QtCore.QRect(190, 80, 93, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.btn_user_price.setFont(font)
+        self.btn_user_price.setObjectName("btn_user_price")
+        self.btn_user_price.clicked.connect(self.calculate_user_price)
+        self.user_dollar_price = QtWidgets.QLineEdit(Dialog)
+        self.user_dollar_price.setGeometry(QtCore.QRect(62, 30, 131, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.user_dollar_price.setFont(font)
+        self.user_dollar_price.setText("")
+        self.user_dollar_price.setAlignment(QtCore.Qt.AlignCenter)
+        self.user_dollar_price.setObjectName("user_dollar_price")
+        self.user_toman_result = QtWidgets.QLineEdit(Dialog)
+        self.user_toman_result.setGeometry(QtCore.QRect(110, 130, 113, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.user_toman_result.setFont(font)
+        self.user_toman_result.setText("")
+        self.user_toman_result.setAlignment(QtCore.Qt.AlignCenter)
+        self.user_toman_result.setReadOnly(True)
+        self.user_toman_result.setObjectName("user_toman_result")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(230, 130, 171, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label.setFont(font)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        self.label3.setText(_translate("Dialog", "قیمت کالا را به دلار وارد کنید:"))
+        self.btn_user_price.setText(_translate("Dialog", "محاسبه"))
+        self.user_dollar_price.setPlaceholderText(_translate("Dialog", "قیمت به دلار"))
+        self.label.setText(_translate("Dialog", "قیمت کالا به تومان"))
+    
+    def calculate_user_price(self):
+        user_price = self.user_dollar_price.text()
+
+        if user_price.isnumeric():
+            pass
+        else:
+            self.user_toman_result.setText("فقط عدد!")
+            return
+        dollar_price = get_data()
+        new_list = []
+        for char in dollar_price:
+            if char.isnumeric():
+                new_list.append(char)
+        dollar_price = ""
+        for char in new_list:
+            dollar_price += char
+        
+        result = str(int(user_price) * int(dollar_price)) 
+        self.user_toman_result.setText(rial_to_toman_convertor(result+'0'))
+
+
 
 
 class Ui_MainWindow(object):
@@ -79,48 +165,37 @@ class Ui_MainWindow(object):
         self.setFixedWidth(650)
         self.setFixedHeight(350)
         self.setWindowIcon(QtGui.QIcon(resource_path('./assets/icon.ico')))
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        MainWindow.resize(650, 350)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            MainWindow.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setKerning(True)
         MainWindow.setFont(font)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.centralwidget.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(30, 30, 211, 20))
+        self.label.setGeometry(QtCore.QRect(40, 20, 211, 31))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.refreshBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.refreshBtn.setGeometry(QtCore.QRect(550, 20, 93, 28))
+        self.refreshBtn.setGeometry(QtCore.QRect(540, 20, 93, 28))
         self.refreshBtn.setObjectName("refreshBtn")
-        self.refreshBtn.clicked.connect(self.get_data)
-        self.exitBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.exitBtn.setGeometry(QtCore.QRect(450, 20, 93, 28))
-        self.exitBtn.setObjectName("exitBtn")
-        self.exitBtn.clicked.connect(QApplication.instance().quit)
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox.setGeometry(QtCore.QRect(9, 69, 631, 201))
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.groupBox.setGeometry(QtCore.QRect(9, 60, 631, 191))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.groupBox.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(self.groupBox.sizePolicy().hasHeightForWidth())
         self.groupBox.setSizePolicy(sizePolicy)
-        self.groupBox.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+        self.groupBox.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.groupBox.setObjectName("groupBox")
         self.label_2 = QtWidgets.QLabel(self.groupBox)
         self.label_2.setGeometry(QtCore.QRect(300, 50, 271, 51))
@@ -144,21 +219,37 @@ class Ui_MainWindow(object):
         font.setPointSize(15)
         self.price.setFont(font)
         self.price.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.price.setText("")
         self.price.setAlignment(QtCore.Qt.AlignCenter)
         self.price.setReadOnly(True)
         self.price.setObjectName("price")
         self.log = QtWidgets.QPlainTextEdit(self.centralwidget)
-        self.log.setGeometry(QtCore.QRect(10, 280, 631, 61))
+        self.log.setGeometry(QtCore.QRect(10, 260, 631, 81))
         self.log.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
-        self.log.setSizeAdjustPolicy(
-            QtWidgets.QAbstractScrollArea.AdjustToContents)
+        self.log.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.log.setUndoRedoEnabled(False)
         self.log.setReadOnly(True)
         self.log.setObjectName("log")
+        self.calculate_price = QtWidgets.QPushButton(self.centralwidget)
+        self.calculate_price.setGeometry(QtCore.QRect(380, 20, 151, 28))
+        self.calculate_price.setObjectName("calculate_price")
+        self.calculate_price.clicked.connect(self.calculate_user_price)
+        self.exitBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.exitBtn.setGeometry(QtCore.QRect(280, 20, 93, 28))
+        self.exitBtn.setObjectName("exitBtn")
         MainWindow.setCentralWidget(self.centralwidget)
+        self.exitBtn.clicked.connect(QApplication.instance().quit)
+        self.refreshBtn.clicked.connect(self.get_data)
+
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.refreshBtn, self.calculate_price)
+        MainWindow.setTabOrder(self.calculate_price, self.exitBtn)
+        MainWindow.setTabOrder(self.exitBtn, self.price)
+        MainWindow.setTabOrder(self.price, self.log)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -172,6 +263,8 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "قیمت لحظه‌ای دلار:"))
         self.last_change.setText(_translate("MainWindow", ""))
         self.price.setText(_translate("MainWindow", ""))
+        self.calculate_price.setText(_translate("MainWindow", "محاسبه قیمت یک کالا"))
+        self.exitBtn.setText(_translate("MainWindow", "خروج"))
         self.get_data()
 
     def get_data(self):
@@ -222,6 +315,11 @@ class Ui_MainWindow(object):
         self.refreshBtn.setText("رفرش")
         self.log.moveCursor(QtGui.QTextCursor.End)
 
+    def calculate_user_price(self):
+        Dialog = QtWidgets.QDialog()
+        ui = User_Price_Calculator_Ui()
+        ui.setupUi(Dialog)
+        Dialog.exec_()
 
 
 
