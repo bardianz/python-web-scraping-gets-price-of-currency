@@ -6,3 +6,5 @@ dist
 main.spec
 main.exe
 .gitignore
+mainwindow2.py
+mainwindow2.ui

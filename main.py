@@ -48,6 +48,8 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath('.'), relative_path)
 
+last_price = ''
+
 
 def get_data():
     url = 'https://www.tgju.org/%D9%82%DB%8C%D9%85%D8%AA-%D8%AF%D9%84%D8%A7%D8%B1'
@@ -76,6 +78,7 @@ app = QApplication(sys.argv)
 
 
 class User_Price_Calculator_Ui(object):
+    dollar_price = '0'
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.setWindowIcon(QtGui.QIcon(resource_path('./assets/icon.ico')))
@@ -135,7 +138,22 @@ class User_Price_Calculator_Ui(object):
         self.btn_user_price.setText(_translate("Dialog", "محاسبه"))
         self.user_dollar_price.setPlaceholderText(_translate("Dialog", "قیمت به دلار"))
         self.label.setText(_translate("Dialog", "قیمت کالا به تومان"))
+        self.get_data_from_function()
     
+    def get_data_from_function(self):
+        self.dollar_price = get_data()
+        new_list = []
+        for char in self.dollar_price:
+            if char.isnumeric():
+                new_list.append(char)
+        self.dollar_price = ""
+        for char in new_list:
+            self.dollar_price += char
+        
+
+    
+
+
     def calculate_user_price(self):
         user_price = self.user_dollar_price.text()
 
@@ -144,16 +162,9 @@ class User_Price_Calculator_Ui(object):
         else:
             self.user_toman_result.setText("فقط عدد!")
             return
-        dollar_price = get_data()
-        new_list = []
-        for char in dollar_price:
-            if char.isnumeric():
-                new_list.append(char)
-        dollar_price = ""
-        for char in new_list:
-            dollar_price += char
         
-        result = str(int(user_price) * int(dollar_price)) 
+        
+        result = str(int(user_price) * int(self.dollar_price)) 
         self.user_toman_result.setText(rial_to_toman_convertor(result+'0'))
 
 
