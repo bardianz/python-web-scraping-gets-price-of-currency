@@ -11,6 +11,13 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath('.'), relative_path)
 
+def is_float_digit(n: str) -> bool:
+    try:
+        float(n)
+        return True
+    except ValueError:
+        return False
+
 
 def unicode_number_covertor(number):
     mylist = []
@@ -81,14 +88,17 @@ class Main_Ui(QtWidgets.QMainWindow):
         for char in new_list:
             dollar_price += char
 
-        if dollar_price.isnumeric == False:
+
+
+
+        if is_float_digit(dollar_price) == False:
             self.log.append("<font color='red'><red>خطایی در تبدیل واحد زخ داد</font>")           
             return
 
         user_price = self.user_dollar_price.text()
 
-        if user_price.isnumeric():
-            result = str(int(user_price) * int(dollar_price)) 
+        if is_float_digit(user_price):
+            result = str(int(float(user_price) * float(dollar_price))) 
             result_text = "%s دلار برابر است با %s تومان" % (user_price, rial_to_toman_convertor(result+'0'))
             self.log.append("<font color='green'><red>"+result_text+"</font>")
 
